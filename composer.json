@@ -1,3 +1,8 @@
 {
-  "name": "derhasi/tempdirectory"
+  "name": "derhasi/tempdirectory",
+  "autoload": {
+    "psr-4": {
+      "derhasi\\tempdirectory\\": ""
+    }
+  }
 }
