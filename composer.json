@@ -20,5 +20,9 @@
     "psr-4": {
       "derhasi\\tempdirectory\\": ""
     }
+  },
+  "require-dev": {
+    "composer/composer": "1.0.*@dev",
+    "phpunit/phpunit": "4.4.*"
   }
 }
