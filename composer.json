@@ -1,5 +1,21 @@
 {
   "name": "derhasi/tempdirectory",
+  "description": "Provides a representation of a temp directory that will destroy itself.",
+  "keywords": [
+    "phpunit",
+    "test",
+    "temporary",
+    "filesystem"
+  ],
+  "homepage": "https://github.com/derhasi/tempdirectory",
+  "license": "GPL-2.0+",
+  "authors": [
+    {
+      "name": "Johannes Haseitl",
+      "email": "johannes@undpaul.de",
+      "homepage": "http://www.undpaul.de"
+    }
+  ],
   "autoload": {
     "psr-4": {
       "derhasi\\tempdirectory\\": ""
