@@ -103,9 +103,22 @@ class TempDirectory {
    */
   protected function createDirectory() {
     if (!isset($this->root)) {
-      $this->root = sys_get_temp_dir() . '/' . $this->getSubdir();
+      $this->root = $this->getAndPrepareSystemTempDir() . '/' . $this->getSubdir();
       mkdir($this->root);
     }
+  }
+
+  /**
+   * Helper to get and prepare system temp directory.
+   *
+   * @return string
+   */
+  protected function getAndPrepareSystemTempDir() {
+    $dir = sys_get_temp_dir();
+    if (!file_exists($dir)) {
+      mkdir($dir, 0777, true);
+    }
+    return $dir;
   }
 
   /**
