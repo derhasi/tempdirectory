@@ -103,9 +103,29 @@ class TempDirectory {
    */
   protected function createDirectory() {
     if (!isset($this->root)) {
-      $this->root = $this->getAndPrepareSystemTempDir() . '/' . $this->getSubdir();
+      $this->root = $this->buildRoot();
       mkdir($this->root);
     }
+  }
+
+  /**
+   * Retrieve root path, that is not already taken.
+   *
+   * @return string
+   */
+  protected function buildRoot() {
+    $root = $this->getAndPrepareSystemTempDir() . '/' . $this->getSubdir();
+
+    if (file_exists($root)) {
+
+      $count = 1;
+      while (file_exists($root . '_' . $count)) {
+        $count++;
+      }
+
+      return $root . '_' . $count;
+    }
+    return $root;
   }
 
   /**
