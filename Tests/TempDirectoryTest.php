@@ -21,10 +21,10 @@ class TempDirectoryTest extends \PHPUnit_Framework_TestCase {
     $dir = new TempDirectory('test');
 
     $root = $dir->getRoot();
-    $this->assertTrue(file_exists($root) && is_dir($root), 'Temp directory created.');
+    $this->assertIsDir($root, 'Temp directory created.');
 
     unset($dir);
-    $this->assertFalse(file_exists($root), 'Temp directory removed on destruction');
+    $this->assertFileNotExists($root, 'Temp directory removed on destruction');
   }
 
   /**
@@ -36,14 +36,24 @@ class TempDirectoryTest extends \PHPUnit_Framework_TestCase {
     $t2 = new TempDirectory('test2');
 
     $dir1 = $t1->getRoot();
-    $this->assertTrue(file_exists($dir1) && is_dir($dir1), 'Temp directory 1 created.');
+    $this->assertIsDir($dir1, 'Temp directory 1 created.');
     unset($t1);
-    $this->assertFalse(file_exists($dir1), 'Temp directory 1 removed.');
+    $this->assertFileNotExists($dir1, 'Temp directory 1 removed.');
 
     $dir2 = $t2->getRoot();
-    $this->assertTrue(file_exists($dir2) && is_dir($dir2), 'Temp directory 2 created.');
+    $this->assertIsDir($dir2, 'Temp directory 2 created.');
     unset($t2);
-    $this->assertFalse(file_exists($dir2) && is_dir($dir2), 'Temp directory 2 removed.');
+    $this->assertFileNotExists($dir2, 'Temp directory 2 removed.');
 
+  }
+
+  /**
+   * Custom assertion for existing directory.
+   *
+   * @param $path
+   * @param string $message
+   */
+  protected function assertIsDir($path, $message = '') {
+    $this->assertTrue(file_exists($path) && is_dir($path), $message);
   }
 }
