@@ -156,15 +156,29 @@ class TempDirectory {
    * @param string $path
    */
   public static function removeRecursive($path) {
+
     // If the path is not a directory we can simply unlink it.
     if (!is_dir($path)) {
+      chmod($path, 0777);
       return unlink($path);
     }
 
     // Otherwise we go through the whole directory.
     $it = new \RecursiveDirectoryIterator($path);
-    $it = new \RecursiveIteratorIterator($it, \RecursiveIteratorIterator::CHILD_FIRST);
-    foreach ($it as $file) {
+
+    // Fix permissions for all folders and files first, before we try to change
+    // the file mode.
+    $files = new \RecursiveIteratorIterator($it, \RecursiveIteratorIterator::SELF_FIRST);
+    foreach ($files as $file) {
+      if ('.' === $file->getBasename() || '..' === $file->getBasename()) {
+        continue;
+      }
+      chmod($file->getPathname(), 0777);
+    }
+
+    // Delete files first, before folders are removed.
+    $files = new \RecursiveIteratorIterator($it, \RecursiveIteratorIterator::CHILD_FIRST);
+    foreach ($files as $file) {
       if ('.' === $file->getBasename() || '..' === $file->getBasename()) {
         continue;
       }
