@@ -68,17 +68,18 @@ class TempDirectoryTest extends \PHPUnit_Framework_TestCase {
     file_put_contents($fileInProtectedFolder, '');
     file_put_contents($protectedFileInProtectedFolder, '');
 
-    chmod($protectedFolder, 0400);
-    chmod($protectedFile, 0400);
-    chmod($protectedFileInProtectedFolder, 0400);
-
     $this->assertIsDir($root);
     $this->assertIsDir($protectedFolder);
     $this->assertFileExists($protectedFile);
     $this->assertFileExists($protectedFileInProtectedFolder);
     $this->assertFileExists($fileInProtectedFolder);
 
+    chmod($protectedFile, 0400);
+    chmod($protectedFileInProtectedFolder, 0400);
+    chmod($protectedFolder, 0400);
+
     // After unsetting the temp directory, the folder should be removed completely.
+    unset($dir);
     $this->assertFileNotExists($root);
   }
 
