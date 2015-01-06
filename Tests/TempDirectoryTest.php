@@ -30,6 +30,8 @@ class TempDirectoryTest extends \PHPUnit_Framework_TestCase {
   /**
    * Test if directory with same name is generated, two differn directories are
    * created.
+   *
+   * @depends testTempDirectoryClass
    */
   public function testTempSimultanious() {
     $t1 = new TempDirectory('test2');
@@ -45,6 +47,39 @@ class TempDirectoryTest extends \PHPUnit_Framework_TestCase {
     unset($t2);
     $this->assertFileNotExists($dir2, 'Temp directory 2 removed.');
 
+  }
+
+  /**
+   * Test if temp directory can be removed if it holds files with changed mode.
+   *
+   * @depends testTempDirectoryClass
+   */
+  public function testTempPermissions() {
+    $dir = new TempDirectory('testTempPermissions');
+    $root = $dir->getRoot();
+
+    $protectedFolder = $dir->getPath('protectedFolder');
+    $protectedFile = $dir->getPath('protectedFile.txt');
+    $fileInProtectedFolder = $dir->getPath('protectedFolder/file.txt');
+    $protectedFileInProtectedFolder = $dir->getPath('protectedFolder/protectedFile.txt');
+
+    mkdir($protectedFolder);
+    file_put_contents($protectedFile, '');
+    file_put_contents($fileInProtectedFolder, '');
+    file_put_contents($protectedFileInProtectedFolder, '');
+
+    chmod($protectedFolder, 0400);
+    chmod($protectedFile, 0400);
+    chmod($protectedFileInProtectedFolder, 0400);
+
+    $this->assertIsDir($root);
+    $this->assertIsDir($protectedFolder);
+    $this->assertFileExists($protectedFile);
+    $this->assertFileExists($protectedFileInProtectedFolder);
+    $this->assertFileExists($fileInProtectedFolder);
+
+    // After unsetting the temp directory, the folder should be removed completely.
+    $this->assertFileNotExists($root);
   }
 
   /**
