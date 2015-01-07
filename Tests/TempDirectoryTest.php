@@ -84,6 +84,37 @@ class TempDirectoryTest extends \PHPUnit_Framework_TestCase {
   }
 
   /**
+   * Tests if temp directories have a simple name and really are sub
+   *
+   * @param $name
+   *
+   * @dataProvider directoryNames
+   */
+  public function testTempDirectoryName($name) {
+    $dir = sys_get_temp_dir();
+    $temp = new TempDirectory($name);
+    $root = $temp->getRoot();
+    $this->assertRegExp('/^[A-z0-9]*$/', basename($root), 'Folder name is not alphanumeric.');
+    $this->assertEquals($dir, dirname($root), 'Folder is not subfolder of system temp dir');
+  }
+
+  /**
+   * Provides names for a temp directory.
+   *
+   * @return array
+   */
+  public function directoryNames() {
+    return array(
+      array('temp'),
+      array('Dir::test'),
+      array('!"§$%&/()=?`1'),
+      array('derhasi\Component\hello'),
+      array('derhasi/component/hello'),
+      array(__METHOD__),
+    );
+  }
+
+  /**
    * Custom assertion for existing directory.
    *
    * @param $path
