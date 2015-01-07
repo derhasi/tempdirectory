@@ -93,7 +93,8 @@ class TempDirectory {
    */
   protected function setSubdir() {
     $sha = sha1($this->name);
-    $prefix = preg_replace('/[^A-z0-9]/', '', $this->name);
+    // Only allow word characters.
+    $prefix = preg_replace('/[\W]/i', '', $this->name);
     $time = time();
     $this->subdir = "$prefix-$sha-$time";
   }
