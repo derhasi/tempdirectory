@@ -16,9 +16,11 @@ class TempDirectoryTest extends \PHPUnit_Framework_TestCase {
 
   /**
    * Tests the TempDirectory class.
+   *
+   * @dataProvider directoryNames
    */
-  public function testTempDirectoryClass() {
-    $dir = new TempDirectory('test');
+  public function testTempDirectoryClass($name) {
+    $dir = new TempDirectory($name);
 
     $root = $dir->getRoot();
     $this->assertIsDir($root, 'Temp directory created.');
