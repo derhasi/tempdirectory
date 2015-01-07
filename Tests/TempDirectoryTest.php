@@ -96,7 +96,7 @@ class TempDirectoryTest extends \PHPUnit_Framework_TestCase {
     $dir = sys_get_temp_dir();
     $temp = new TempDirectory($name);
     $root = $temp->getRoot();
-    $this->assertRegExp('/^[A-z0-9]*$/', basename($root), 'Folder name is not alphanumeric.');
+    $this->assertRegExp('/^[A-z0-9\-]*$/', basename($root), 'Folder name is not alphanumeric.');
     $this->assertEquals($dir, dirname($root), 'Folder is not subfolder of system temp dir');
   }
 
