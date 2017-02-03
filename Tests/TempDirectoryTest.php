@@ -86,6 +86,38 @@ class TempDirectoryTest extends \PHPUnit_Framework_TestCase {
   }
 
   /**
+   * Test symlinked content.
+   *
+   * @depends testTempDirectoryClass
+   */
+  public function testSymlinks() {
+    $dir = new TempDirectory('testSymlinks');
+    $root = $dir->getRoot();
+
+    $folder = $dir->getPath('folder');
+    $file = $dir->getPath('file.txt');
+    // Symlinks start with a, so they get processed first.
+    $symlinkedFolder = $dir->getPath('asymfolder');
+    $symlinkedFile = $dir->getPath('asymfile.txt');
+
+    mkdir($folder);
+    file_put_contents($folder . '/test.txt', '');
+    file_put_contents($file, '');
+    symlink($folder, $symlinkedFolder);
+    symlink($file, $symlinkedFile);
+
+    $this->assertIsDir($root);
+    $this->assertIsDir($folder);
+    $this->assertFileExists($file);
+    $this->assertIsDir($symlinkedFolder);
+    $this->assertFileExists($symlinkedFile);
+
+    // After unsetting the temp directory, the folder should be removed completely.
+    unset($dir);
+    $this->assertFileNotExists($root);
+  }
+
+  /**
    * Tests if temp directories have a simple name and really are sub
    *
    * @param $name
