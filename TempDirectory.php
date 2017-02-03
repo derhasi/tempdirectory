@@ -157,6 +157,7 @@ class TempDirectory {
    * @param string $path
    */
   public static function removeRecursive($path) {
+    /** @var \SplFileInfo $file */
 
     // If the path is not a directory we can simply unlink it.
     if (!is_dir($path)) {
@@ -183,7 +184,7 @@ class TempDirectory {
       if ('.' === $file->getBasename() || '..' === $file->getBasename()) {
         continue;
       }
-      if ($file->isDir()) {
+      if ($file->isDir() && !$file->isLink()) {
         rmdir($file->getPathname());
       }
       else {
