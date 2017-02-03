@@ -23,6 +23,6 @@
   },
   "require-dev": {
     "composer/composer": "1.0.*@dev",
-    "phpunit/phpunit": "4.4.*"
+    "phpunit/phpunit": "4.*"
   }
 }
